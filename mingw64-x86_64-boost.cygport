@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross
 
 NAME="mingw64-x86_64-boost"
-VERSION=1.55.0
+VERSION=1.57.0
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Boost C++ libraries for Win64 toolchain"
@@ -17,28 +17,17 @@ SRC_DIR="boost_${VERSION//./_}"
 PATCH_URI="
 	fedora/boost-1.50.0-fix-non-utf8-files.patch
 	fedora/boost-1.50.0-pool.patch
-	fedora/boost-1.54.0-bind-static_assert.patch
-	fedora/boost-1.54.0-concept-unused_typedef.patch
-	fedora/boost-1.54.0-mpl-print.patch
-	fedora/boost-1.54.0-static_warning-unused_typedef.patch
-	fedora/boost-1.54.0-tuple-unused_typedef.patch
-	fedora/boost-1.54.0-random-unused_typedef.patch
-	fedora/boost-1.54.0-date_time-unused_typedef.patch
-	fedora/boost-1.54.0-date_time-unused_typedef-2.patch
-	fedora/boost-1.54.0-spirit-unused_typedef.patch
-	fedora/boost-1.54.0-spirit-unused_typedef-2.patch
-	fedora/boost-1.54.0-numeric-unused_typedef.patch
+	fedora/boost-1.57.0-mpl-print.patch
+	fedora/boost-1.57.0-spirit-unused_typedef.patch
 	fedora/boost-1.54.0-locale-unused_typedef.patch
-	fedora/boost-1.54.0-property_tree-unused_typedef.patch
 	fedora/boost-1.54.0-python-unused_typedef.patch
-	fedora/boost-1.54.0-pool-test_linking.patch
+	fedora/boost-1.57.0-pool-test_linking.patch
 	fedora/boost-1.54.0-pool-max_chunks_shadow.patch
-	fedora/boost-1.55.0-program_options-class_attribute.patch
-	fedora/boost-1.55.0-archive-init_order.patch
-	fedora/boost-1.55.0-xpressive-unused_typedefs.patch
-	fedora/boost-1.55.0-spirit-unused_typedefs.patch
-	fedora/boost-include-intrin-h-on-mingw-w64.patch
+	fedora/boost-1.57.0-signals2-weak_ptr.patch
+	fedora/boost-1.57.0-uuid-comparison.patch
+	fedora/boost-1.57.0-move-is_class.patch
 	fedora/boost-mingw.patch
+	fedora/boost-include-intrin-h-on-mingw-w64.patch
 	1.45.0-jam-cygwin.patch
 "
 
@@ -61,8 +50,8 @@ src_compile() {
 		--without-libraries=python \
 		|| error "configure failed"
 
-	cat >> tools/build/v2/user-config.jam <<_EOF
-using gcc : mingw32 : /usr/bin/${CROSS_HOST}-g++ : <compileflags>"${CXXFLAGS}" ;
+	cat >> tools/build/src/user-config.jam <<_EOF
+using gcc : mingw32 : /usr/bin/${CROSS_HOST}-g++ : <compileflags>"${CXXFLAGS}" <rc>/usr/bin/${CROSS_HOST}-windres ;
 _EOF
 
 	./bjam.exe \
