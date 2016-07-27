@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross
 
 NAME="mingw64-x86_64-boost"
-VERSION=1.58.0
+VERSION=1.60.0
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Boost C++ libraries for Win64 toolchain"
@@ -19,14 +19,8 @@ PATCH_URI="
 	fedora/boost-1.58.0-pool.patch
 	fedora/boost-1.57.0-mpl-print.patch
 	fedora/boost-1.57.0-spirit-unused_typedef.patch
-	fedora/boost-1.54.0-locale-unused_typedef.patch
-	fedora/boost-1.54.0-python-unused_typedef.patch
 	fedora/boost-1.58.0-pool-test_linking.patch
-	fedora/boost-1.57.0-uuid-comparison.patch
-	fedora/boost-1.58.0-variant-includes.patch
 	fedora/boost-1.58.0-address-model.patch
-	fedora/boost-1.58-ublas-inlines.patch
-	fedora/0002-Fix-a-regression-with-non-constexpr-types.patch
 	fedora/boost-mingw.patch
 	fedora/boost-include-intrin-h-on-mingw-w64.patch
 	1.45.0-jam-cygwin.patch
