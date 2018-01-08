@@ -2,8 +2,8 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross
 
 NAME="mingw64-x86_64-boost"
-VERSION=1.60.0
-RELEASE=2
+VERSION=1.64.0
+RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Boost C++ libraries for Win64 toolchain"
 DESCRIPTION="This package does NOT contain cygwin binaries.  Instead, it
@@ -18,11 +18,13 @@ PATCH_URI="
 	fedora/boost-1.50.0-fix-non-utf8-files.patch
 	fedora/boost-1.58.0-pool.patch
 	fedora/boost-1.57.0-mpl-print.patch
-	fedora/boost-1.57.0-spirit-unused_typedef.patch
 	fedora/boost-1.58.0-pool-test_linking.patch
 	fedora/boost-1.58.0-address-model.patch
+	fedora/boost-1.64.0-serialization-make_array.patch
+	fedora/boost-1.64.0-icl-ttp-matching.patch
 	fedora/boost-mingw.patch
 	fedora/boost-include-intrin-h-on-mingw-w64.patch
+	fedora/boost-1.63.0-codecvtwchar.patch
 	1.45.0-jam-cygwin.patch
 "
 
@@ -45,7 +47,7 @@ src_compile() {
 		--without-libraries=python \
 		|| error "configure failed"
 
-	cat >> tools/build/src/user-config.jam <<_EOF
+	cat > tools/build/src/user-config.jam <<_EOF
 using gcc : mingw32 : /usr/bin/${CROSS_HOST}-g++ : <compileflags>"${CXXFLAGS}" <rc>/usr/bin/${CROSS_HOST}-windres ;
 _EOF
 
@@ -61,11 +63,17 @@ _EOF
 
 src_install() {
 	cd ${B}
-	dobin stage/lib/*.dll
-	dolib stage/lib/*.a
+	./bjam.exe \
+		--prefix=${D}${CROSS_PREFIX} \
+		--layout=tagged \
+		--without-mpi \
+		--without-python \
+		release toolset=gcc-mingw32 target-os=windows \
+		threading=single,multi link=shared,static pch=off \
+		${MAKEOPTS} install
 
-	dodir ${CROSS_INCLUDEDIR}
-	cp -pr ${S}/boost ${D}${CROSS_INCLUDEDIR}
+	dodir ${CROSS_BINDIR}
+	mv ${D}${CROSS_LIBDIR}/*.dll ${D}${CROSS_BINDIR}/
 
 	dodoc README LICENSE_1_0.txt
 }
