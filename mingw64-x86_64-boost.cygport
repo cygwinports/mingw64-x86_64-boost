@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross
 
 NAME="mingw64-x86_64-boost"
-VERSION=1.64.0
+VERSION=1.66.0
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Boost C++ libraries for Win64 toolchain"
@@ -19,9 +19,8 @@ PATCH_URI="
 	fedora/boost-1.58.0-pool.patch
 	fedora/boost-1.57.0-mpl-print.patch
 	fedora/boost-1.58.0-pool-test_linking.patch
-	fedora/boost-1.58.0-address-model.patch
-	fedora/boost-1.64.0-serialization-make_array.patch
-	fedora/boost-1.64.0-icl-ttp-matching.patch
+	fedora/boost-1.66.0-address-model.patch
+	fedora/boost-1.66.0-spirit-abs-overflow.patch
 	fedora/boost-mingw.patch
 	fedora/boost-include-intrin-h-on-mingw-w64.patch
 	fedora/boost-1.63.0-codecvtwchar.patch
@@ -56,7 +55,8 @@ _EOF
 		--layout=tagged \
 		--without-mpi \
 		--without-python \
-		release toolset=gcc-mingw32 target-os=windows \
+		release toolset=gcc-mingw32 \
+		target-os=windows address-model=64 \
 		threading=single,multi link=shared,static pch=off \
 		${MAKEOPTS}
 }
@@ -68,7 +68,8 @@ src_install() {
 		--layout=tagged \
 		--without-mpi \
 		--without-python \
-		release toolset=gcc-mingw32 target-os=windows \
+		release toolset=gcc-mingw32 \
+		target-os=windows address-model=64 \
 		threading=single,multi link=shared,static pch=off \
 		${MAKEOPTS} install
 
